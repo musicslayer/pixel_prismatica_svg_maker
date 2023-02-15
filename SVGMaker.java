@@ -2,6 +2,7 @@ import java.lang.StringBuilder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 
 public class SVGMaker {
     public final static String githubPath = "C:\\MIKE\\PROGRAMING\\GitHub\\pixel_prismatica_svg_maker\\svg\\";
@@ -13,26 +14,44 @@ public class SVGMaker {
     
     public static void main(String[] args)
     {
-        writeSVGFile("monochrome.svg", new MonochromeColorPicker());
-        writeSVGFile("red.svg", new RedColorPicker());
-        writeSVGFile("green.svg", new GreenColorPicker());
-        writeSVGFile("blue.svg", new BlueColorPicker());
-        writeSVGFile("green_blue.svg", new GreenBlueColorPicker());
-        writeSVGFile("red_green.svg", new RedGreenColorPicker());
-        writeSVGFile("red_blue.svg", new RedBlueColorPicker());
-        writeSVGFile("cyan.svg", new CyanColorPicker());
-        writeSVGFile("yellow.svg", new YellowColorPicker());
-        writeSVGFile("magenta.svg", new MagentaColorPicker());
-        writeSVGFile("rainbow_light.svg", new RainbowLightColorPicker());
-        writeSVGFile("rainbow_dark.svg", new RainbowDarkColorPicker());
+        createSVG("monochrome", new MonochromeColorPicker());
+        createSVG("red", new RedColorPicker());
+        createSVG("green", new GreenColorPicker());
+        createSVG("blue", new BlueColorPicker());
+        createSVG("green_blue", new GreenBlueColorPicker());
+        createSVG("red_green", new RedGreenColorPicker());
+        createSVG("red_blue", new RedBlueColorPicker());
+        createSVG("cyan", new CyanColorPicker());
+        createSVG("yellow", new YellowColorPicker());
+        createSVG("magenta", new MagentaColorPicker());
+        createSVG("rainbow_light", new RainbowLightColorPicker());
+        createSVG("rainbow_dark", new RainbowDarkColorPicker());
     }
     
-    public static void writeSVGFile(String name, RandomColorPicker rcp) {
+    public static void createSVG(String name, RandomColorPicker rcp) {
         String svgString = getStartString() + getContentString(rcp) + getEndString();
         
-        Path path = Paths.get(githubPath + name);
+        writeSVGFile(name, svgString);
+        writeURIFile(name, svgString);
+    }
+    
+    public static void writeSVGFile(String name, String content) {
+        Path path = Paths.get(githubPath + name + ".svg");
         
-        byte[] strToBytes = svgString.getBytes();
+        byte[] strToBytes = content.getBytes();
+        try {
+            Files.write(path, strToBytes);
+        }
+        catch(Exception e) {
+            System.out.println(e.toString());
+        }
+    }
+    
+    public static void writeURIFile(String name, String content) {
+        Path path = Paths.get(githubPath + name + "_uri.txt");
+        
+        String encodedString = "data:image/svg+xml;base64," + Base64.getEncoder().encodeToString(content.getBytes());
+        byte[] strToBytes = encodedString.getBytes();
         try {
             Files.write(path, strToBytes);
         }
