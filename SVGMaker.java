@@ -5,6 +5,11 @@ import java.nio.file.Paths;
 
 public class SVGMaker {
     public final static String githubPath = "C:\\MIKE\\PROGRAMING\\GitHub\\pixel_prismatica_svg_maker\\svg\\";
+    public final static int rect_width = 8;
+    public final static int rect_height = 8;
+    public final static int num_rect_x = 32;
+    public final static int num_rect_y = 32;
+    public final static int step_duration = 2;
     
     public static void main(String[] args)
     {
@@ -37,10 +42,14 @@ public class SVGMaker {
     }
     
     public static String getStartString() {
+        int width = rect_width * num_rect_x;
+        int height = rect_height * num_rect_y;
+        
         StringBuilder s = new StringBuilder();
         s.append("<?xml version=\"1.0\"?>").append("\n");
         s.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">").append("\n");
-        s.append("<svg xmlns=\"http://www.w3.org/2000/svg\">").append("\n");
+        s.append("<svg width=\"").append(width).append("\" height=\"").append(height).append("\" xmlns=\"http://www.w3.org/2000/svg\">").append("\n");
+        s.append("<rect id=\"box\" width=\"").append(rect_width).append("\" height=\"").append(rect_height).append("\"/>").append("\n");
         return s.toString();
     }
     
@@ -51,11 +60,6 @@ public class SVGMaker {
     }
     
     public static String getContentString(RandomColorPicker rcp) {
-        int rect_width = 8;
-        int rect_height = 8;
-        int num_rect_x = 32;
-        int num_rect_y = 32;
-        
         StringBuilder s = new StringBuilder();
         for(int i_y = 0; i_y < num_rect_y; i_y++) {
             for(int i_x = 0; i_x < num_rect_x; i_x++) {
@@ -68,7 +72,7 @@ public class SVGMaker {
     }
     
     public static String getRectString(int x, int y, int w, int h, RandomColorPicker rcp) {
-        int numColors = 30;
+        int numColors = 10;
         String[] colorStringArray = new String[numColors];
         for(int i = 0; i < numColors; i++) {
             colorStringArray[i] = rcp.pickColor();
@@ -81,12 +85,12 @@ public class SVGMaker {
         }
         sValues.append(colorStringArray[0]);
         
-        String dur = "60s";
+        String dur = (numColors * step_duration) + "s";
         
         StringBuilder s = new StringBuilder();
-        s.append("    <rect x=\"").append(x).append("\" y=\"").append(y).append("\" width=\"").append(w).append("\" height=\"").append(h).append("\" fill=\"").append(colorStringArray[0]).append("\">").append("\n");
-        s.append("        <animate attributeName=\"fill\" values=\"").append(sValues.toString()).append("\" dur=\"").append(dur).append("\" repeatCount=\"indefinite\"/>").append("\n");
-        s.append("    </rect>");
+        s.append("<use href=\"#box\" x=\"").append(x).append("\" y=\"").append(y).append("\">").append("\n");
+        s.append("<animate attributeName=\"fill\" values=\"").append(sValues.toString()).append("\" dur=\"").append(dur).append("\" repeatCount=\"indefinite\"/>").append("\n");
+        s.append("</use>");
         return s.toString();
     }
 }
