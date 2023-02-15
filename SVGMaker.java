@@ -2,16 +2,30 @@ import java.lang.StringBuilder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class SVGMaker {
     public final static String githubPath = "C:\\MIKE\\PROGRAMING\\GitHub\\pixel_prismatica_svg_maker\\svg\\";
     
     public static void main(String[] args)
     {
-        String svgString = getStartString() + getContentString() + getEndString();
+        writeSVGFile("monochrome.svg", new MonochromeColorPicker());
+        writeSVGFile("red.svg", new RedColorPicker());
+        writeSVGFile("green.svg", new GreenColorPicker());
+        writeSVGFile("blue.svg", new BlueColorPicker());
+        writeSVGFile("green_blue.svg", new GreenBlueColorPicker());
+        writeSVGFile("red_green.svg", new RedGreenColorPicker());
+        writeSVGFile("red_blue.svg", new RedBlueColorPicker());
+        writeSVGFile("cyan.svg", new CyanColorPicker());
+        writeSVGFile("yellow.svg", new YellowColorPicker());
+        writeSVGFile("magenta.svg", new MagentaColorPicker());
+        writeSVGFile("rainbow_light.svg", new RainbowLightColorPicker());
+        writeSVGFile("rainbow_dark.svg", new RainbowDarkColorPicker());
+    }
+    
+    public static void writeSVGFile(String name, RandomColorPicker rcp) {
+        String svgString = getStartString() + getContentString(rcp) + getEndString();
         
-        Path path = Paths.get(githubPath + "rainbow.svg");
+        Path path = Paths.get(githubPath + name);
         
         byte[] strToBytes = svgString.getBytes();
         try {
@@ -36,14 +50,7 @@ public class SVGMaker {
         return s.toString();
     }
     
-    public static String getContentString() {
-        /*
-        int rect_width = 16;
-        int rect_height = 16;
-        int num_rect_x = 16;
-        int num_rect_y = 16;
-        */
-        
+    public static String getContentString(RandomColorPicker rcp) {
         int rect_width = 8;
         int rect_height = 8;
         int num_rect_x = 32;
@@ -54,29 +61,31 @@ public class SVGMaker {
             for(int i_x = 0; i_x < num_rect_x; i_x++) {
                 int rect_x = i_x * rect_width;
                 int rect_y = i_y * rect_height;
-                s.append(getRectString(rect_x, rect_y, rect_width, rect_height)).append("\n");
+                s.append(getRectString(rect_x, rect_y, rect_width, rect_height, rcp)).append("\n");
             }
         }
         return s.toString();
     }
     
-    public static String getRectString(int x, int y, int w, int h) {
-        int randomNumA = ThreadLocalRandom.current().nextInt(0, 256);
-        int randomNumB = ThreadLocalRandom.current().nextInt(0, 256);
-        int randomNumC = ThreadLocalRandom.current().nextInt(0, 256);
-        int randomNumD = ThreadLocalRandom.current().nextInt(0, 256);
-        int randomNumE = ThreadLocalRandom.current().nextInt(0, 256);
-        int randomNumF = ThreadLocalRandom.current().nextInt(0, 256);
+    public static String getRectString(int x, int y, int w, int h, RandomColorPicker rcp) {
+        int numColors = 30;
+        String[] colorStringArray = new String[numColors];
+        for(int i = 0; i < numColors; i++) {
+            colorStringArray[i] = rcp.pickColor();
+        }
         
-        int randomNumX = ThreadLocalRandom.current().nextInt(4, 16);
+        StringBuilder sValues = new StringBuilder();
+        for(int i = 0; i < numColors; i++) {
+            sValues.append(colorStringArray[i]);
+            sValues.append(";");
+        }
+        sValues.append(colorStringArray[0]);
         
-        String colorString1 = String.format("#%02X%02X%02X", randomNumA, randomNumB, randomNumC);
-        String colorString2 = String.format("#%02X%02X%02X", randomNumD, randomNumE, randomNumF);
+        String dur = "60s";
         
-        String dur = randomNumX + "s";
         StringBuilder s = new StringBuilder();
-        s.append("    <rect x=\"").append(x).append("\" y=\"").append(y).append("\" width=\"").append(w).append("\" height=\"").append(h).append("\" fill=\"").append(colorString1).append("\">").append("\n");
-        s.append("        <animate attributeName=\"fill\" values=\"").append(colorString1).append(";").append(colorString2).append(";").append(colorString1).append("\" dur=\"").append(dur).append("\" repeatCount=\"indefinite\"/>").append("\n");
+        s.append("    <rect x=\"").append(x).append("\" y=\"").append(y).append("\" width=\"").append(w).append("\" height=\"").append(h).append("\" fill=\"").append(colorStringArray[0]).append("\">").append("\n");
+        s.append("        <animate attributeName=\"fill\" values=\"").append(sValues.toString()).append("\" dur=\"").append(dur).append("\" repeatCount=\"indefinite\"/>").append("\n");
         s.append("    </rect>");
         return s.toString();
     }
