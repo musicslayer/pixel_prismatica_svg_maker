@@ -67,7 +67,9 @@ public class SVGMaker {
         StringBuilder s = new StringBuilder();
         s.append("<?xml version=\"1.1\"?>").append("\n");
         s.append("<svg width=\"").append(width).append("\" height=\"").append(height).append("\" xmlns=\"http://www.w3.org/2000/svg\">").append("\n");
+        s.append("<defs>").append("\n");
         s.append("<rect id=\"box\" width=\"").append(rect_width).append("\" height=\"").append(rect_height).append("\"/>").append("\n");
+        s.append("</defs>").append("\n");
         return s.toString();
     }
     
@@ -83,13 +85,13 @@ public class SVGMaker {
             for(int i_x = 0; i_x < num_rect_x; i_x++) {
                 int rect_x = i_x * rect_width;
                 int rect_y = i_y * rect_height;
-                s.append(getRectString(rect_x, rect_y, rect_width, rect_height, rcp)).append("\n");
+                s.append(getRectString(rect_x, rect_y, rcp));
             }
         }
         return s.toString();
     }
     
-    public static String getRectString(int x, int y, int w, int h, RandomColorPicker rcp) {
+    public static String getRectString(int x, int y, RandomColorPicker rcp) {
         int numColors = 10;
         String[] colorStringArray = new String[numColors];
         for(int i = 0; i < numColors; i++) {
@@ -108,7 +110,7 @@ public class SVGMaker {
         StringBuilder s = new StringBuilder();
         s.append("<use href=\"#box\" x=\"").append(x).append("\" y=\"").append(y).append("\">").append("\n");
         s.append("<animate attributeName=\"fill\" values=\"").append(sValues.toString()).append("\" dur=\"").append(dur).append("\" repeatCount=\"indefinite\"/>").append("\n");
-        s.append("</use>");
+        s.append("</use>").append("\n");
         return s.toString();
     }
 }
