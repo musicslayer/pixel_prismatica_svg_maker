@@ -14,6 +14,8 @@ public class SVGMaker {
     
     public static void main(String[] args)
     {
+        createSVG("rainbow_light", new RainbowLightColorPicker());
+        createSVG("rainbow_dark", new RainbowDarkColorPicker());
         createSVG("monochrome", new MonochromeColorPicker());
         createSVG("red", new RedColorPicker());
         createSVG("green", new GreenColorPicker());
@@ -24,8 +26,6 @@ public class SVGMaker {
         createSVG("cyan", new CyanColorPicker());
         createSVG("yellow", new YellowColorPicker());
         createSVG("magenta", new MagentaColorPicker());
-        createSVG("rainbow_light", new RainbowLightColorPicker());
-        createSVG("rainbow_dark", new RainbowDarkColorPicker());
     }
     
     public static void createSVG(String name, RandomColorPicker rcp) {
@@ -65,8 +65,7 @@ public class SVGMaker {
         int height = rect_height * num_rect_y;
         
         StringBuilder s = new StringBuilder();
-        s.append("<?xml version=\"1.0\"?>").append("\n");
-        s.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">").append("\n");
+        s.append("<?xml version=\"1.1\"?>").append("\n");
         s.append("<svg width=\"").append(width).append("\" height=\"").append(height).append("\" xmlns=\"http://www.w3.org/2000/svg\">").append("\n");
         s.append("<rect id=\"box\" width=\"").append(rect_width).append("\" height=\"").append(rect_height).append("\"/>").append("\n");
         return s.toString();
