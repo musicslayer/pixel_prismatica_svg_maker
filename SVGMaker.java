@@ -6,10 +6,11 @@ import java.util.Base64;
 
 public class SVGMaker {
     public final static String githubPath = "C:\\MIKE\\PROGRAMING\\GitHub\\pixel_prismatica_svg_maker\\svg\\";
-    public final static int rect_width = 8;
-    public final static int rect_height = 8;
-    public final static int num_rect_x = 32;
-    public final static int num_rect_y = 32;
+    public final static int numColors = 5;
+    public final static int num_rect_x = 2;
+    public final static int num_rect_y = 2;
+    public final static int rect_width = 20;
+    public final static int rect_height = 20;
     public final static int step_duration = 2;
     
     public static void main(String[] args)
@@ -92,7 +93,6 @@ public class SVGMaker {
     }
     
     public static String getRectString(int x, int y, RandomColorPicker rcp) {
-        int numColors = 10;
         String[] colorStringArray = new String[numColors];
         for(int i = 0; i < numColors; i++) {
             colorStringArray[i] = rcp.pickColor();
