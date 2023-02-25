@@ -7,10 +7,10 @@ import java.util.Base64;
 public class SVGMaker {
     public final static String githubPath = "C:\\MIKE\\PROGRAMING\\GitHub\\pixel_prismatica_svg_maker\\svg\\";
     public final static int numColors = 5;
-    public final static int num_rect_x = 2;
-    public final static int num_rect_y = 2;
-    public final static int rect_width = 20;
-    public final static int rect_height = 20;
+    public final static int num_rect_x = 10;
+    public final static int num_rect_y = 10;
+    public final static int rect_width = 10;
+    public final static int rect_height = 10;
     public final static int step_duration = 2;
     
     public static void main(String[] args)
